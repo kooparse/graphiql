@@ -4,7 +4,7 @@
  *  This source code is licensed under the MIT license found in the
  *  LICENSE file in the root directory of this source tree.
  */
-import type * as CM from 'codemirror';
+import CM from 'codemirror';
 
 import {
   GraphQLNonNull,
@@ -26,7 +26,7 @@ export default function onHasCompletion(
   data: CM.EditorChangeLinkedList | undefined,
   onHintInformationRender: (el: HTMLDivElement) => void,
 ) {
-  const CodeMirror = require('codemirror');
+  const CodeMirror = CM;
 
   let information: HTMLDivElement | null;
   let deprecation: HTMLDivElement | null;

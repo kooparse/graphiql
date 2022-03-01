@@ -6,7 +6,6 @@
  */
 
 import React from 'react';
-import type * as CM from 'codemirror';
 import {
   FragmentDefinitionNode,
   GraphQLSchema,
@@ -18,6 +17,25 @@ import { normalizeWhitespace } from '../utility/normalizeWhitespace';
 import onHasCompletion from '../utility/onHasCompletion';
 import commonKeys from '../utility/commonKeys';
 import { SizerComponent } from '../utility/CodeMirrorSizer';
+
+import CM from 'codemirror';
+import 'codemirror/addon/hint/show-hint';
+import 'codemirror/addon/comment/comment';
+import 'codemirror/addon/edit/matchbrackets';
+import 'codemirror/addon/edit/closebrackets';
+import 'codemirror/addon/fold/foldgutter';
+import 'codemirror/addon/fold/brace-fold';
+import 'codemirror/addon/search/search';
+import 'codemirror/addon/search/searchcursor';
+import 'codemirror/addon/search/jump-to-line';
+import 'codemirror/addon/dialog/dialog';
+import 'codemirror/addon/lint/lint';
+import 'codemirror/keymap/sublime';
+import 'codemirror-graphql/hint';
+import 'codemirror-graphql/lint';
+import 'codemirror-graphql/info';
+import 'codemirror-graphql/jump';
+import 'codemirror-graphql/mode';
 
 const md = new MD();
 const AUTO_COMPLETE_AFTER_KEY = /^[a-zA-Z0-9_@(]$/;
@@ -69,28 +87,8 @@ export class QueryEditor extends React.Component<QueryEditorProps, {}>
   }
 
   componentDidMount() {
-    // Lazily require to ensure requiring GraphiQL outside of a Browser context
-    // does not produce an error.
-    const CodeMirror = require('codemirror');
-    require('codemirror/addon/hint/show-hint');
-    require('codemirror/addon/comment/comment');
-    require('codemirror/addon/edit/matchbrackets');
-    require('codemirror/addon/edit/closebrackets');
-    require('codemirror/addon/fold/foldgutter');
-    require('codemirror/addon/fold/brace-fold');
-    require('codemirror/addon/search/search');
-    require('codemirror/addon/search/searchcursor');
-    require('codemirror/addon/search/jump-to-line');
-    require('codemirror/addon/dialog/dialog');
-    require('codemirror/addon/lint/lint');
-    require('codemirror/keymap/sublime');
-    require('codemirror-graphql/hint');
-    require('codemirror-graphql/lint');
-    require('codemirror-graphql/info');
-    require('codemirror-graphql/jump');
-    require('codemirror-graphql/mode');
-
-    const editor: CM.Editor = (this.editor = CodeMirror(this._node, {
+    // @ts-expect-error
+    const editor: CM.Editor = (this.editor = CM(this._node, {
       value: this.props.value || '',
       lineNumbers: true,
       tabSize: 2,
@@ -209,7 +207,7 @@ export class QueryEditor extends React.Component<QueryEditorProps, {}>
   }
 
   componentDidUpdate(prevProps: QueryEditorProps) {
-    const CodeMirror = require('codemirror');
+    const CodeMirror = CM;
 
     // Ensure the changes caused by this update are not interpretted as
     // user-input changes which could otherwise result in an infinite
