@@ -7,11 +7,26 @@
 // / <reference path="../../node_modules/@types/codemirror/addon/hint/show-hint.d.ts" />
 
 import { GraphQLType } from 'graphql';
-import type * as CM from 'codemirror';
+// import type * as CM from 'codemirror';
 import React from 'react';
 
 import onHasCompletion from '../utility/onHasCompletion';
 import commonKeys from '../utility/commonKeys';
+
+import CM from 'codemirror';
+import 'codemirror/addon/hint/show-hint';
+import 'codemirror/addon/edit/matchbrackets';
+import 'codemirror/addon/edit/closebrackets';
+import 'codemirror/addon/fold/brace-fold';
+import 'codemirror/addon/fold/foldgutter';
+import 'codemirror/addon/lint/lint';
+import 'codemirror/addon/search/searchcursor';
+import 'codemirror/addon/search/jump-to-line';
+import 'codemirror/addon/dialog/dialog';
+import 'codemirror/keymap/sublime';
+import 'codemirror-graphql/variables/hint';
+import 'codemirror-graphql/variables/lint';
+import 'codemirror-graphql/variables/mode';
 
 declare module CodeMirror {
   export interface Editor extends CM.Editor {}
@@ -66,20 +81,7 @@ export class VariableEditor extends React.Component<VariableEditorProps> {
   componentDidMount() {
     // Lazily require to ensure requiring GraphiQL outside of a Browser context
     // does not produce an error.
-    this.CodeMirror = require('codemirror');
-    require('codemirror/addon/hint/show-hint');
-    require('codemirror/addon/edit/matchbrackets');
-    require('codemirror/addon/edit/closebrackets');
-    require('codemirror/addon/fold/brace-fold');
-    require('codemirror/addon/fold/foldgutter');
-    require('codemirror/addon/lint/lint');
-    require('codemirror/addon/search/searchcursor');
-    require('codemirror/addon/search/jump-to-line');
-    require('codemirror/addon/dialog/dialog');
-    require('codemirror/keymap/sublime');
-    require('codemirror-graphql/variables/hint');
-    require('codemirror-graphql/variables/lint');
-    require('codemirror-graphql/variables/mode');
+    this.CodeMirror = CM;
 
     const editor = (this.editor = this.CodeMirror(this._node, {
       value: this.props.value || '',
@@ -158,7 +160,7 @@ export class VariableEditor extends React.Component<VariableEditorProps> {
   }
 
   componentDidUpdate(prevProps: VariableEditorProps) {
-    this.CodeMirror = require('codemirror');
+    this.CodeMirror = CM;
     if (!this.editor) {
       return;
     }
